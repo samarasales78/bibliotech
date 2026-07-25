@@ -5,32 +5,39 @@ import java.util.ArrayList;
 // Representa um usuário cadastrado no sistema da biblioteca.
 public class Usuario {
 
-    /* O identificador permite localizar individualmente o usuário e relacioná-lo aos empréstimos registrados no sistema. */
+    /* O ID identifica individualmente o usuário e permite
+    relacioná-lo aos empréstimos registrados no sistema. */
     private int id;
 
     // Armazena o nome completo do usuário.
     private String nome;
 
-    /* O CPF identifica o usuário e pode ser utilizado para evitar cadastros duplicados. */
+    /* O CPF identifica o usuário e pode ser utilizado
+    para evitar cadastros duplicados. */
     private String cpf;
 
     /* Armazena o gênero literário de preferência do usuário.
-    Essa informação é utilizada para gerar recomendações de livros. */
+    Essa informação é utilizada para gerar recomendações. */
     private String generoFavorito;
 
-    /* A pontuação representa a participação do usuário nas atividades realizadas na biblioteca. */
+    // Armazena a pontuação acumulada pelo usuário.
     private int pontos;
 
     /* Armazena os IDs dos livros adicionados aos favoritos.
-    Os IDs permitem localizar os livros correspondentes no acervo. */
+    Os IDs permitem localizar os livros no acervo. */
     private ArrayList<Integer> livrosFavoritos;
+
+    /* Define se o usuário possui permissões administrativas.
+    Administradores gerenciam o acervo e os usuários. */
+    private boolean administrador;
 
     // Construtor padrão.
     public Usuario() {
         livrosFavoritos = new ArrayList<>();
     }
 
-    /* Cria um usuário com seus dados principais. A lista de favoritos é iniciada vazia. */
+    /* Cria um usuário comum com seus dados principais.
+    A lista de favoritos é iniciada vazia. */
     public Usuario(
             int id,
             String nome,
@@ -43,17 +50,37 @@ public class Usuario {
         this.generoFavorito = generoFavorito;
         this.pontos = 0;
         this.livrosFavoritos = new ArrayList<>();
+        this.administrador = false;
     }
 
-    /* Cria um usuário com todos os seus dados definidos.
-    Esse construtor permite reconstruir corretamente registros armazenados. */
+    /* Cria um usuário com seu tipo de acesso definido.
+    O parâmetro administrador controla suas permissões. */
+    public Usuario(
+            int id,
+            String nome,
+            String cpf,
+            String generoFavorito,
+            boolean administrador
+    ) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.generoFavorito = generoFavorito;
+        this.pontos = 0;
+        this.livrosFavoritos = new ArrayList<>();
+        this.administrador = administrador;
+    }
+
+    /* Reconstrói um usuário com todos os dados armazenados.
+    Os IDs dos favoritos permitem recuperar os livros correspondentes. */
     public Usuario(
             int id,
             String nome,
             String cpf,
             String generoFavorito,
             int pontos,
-            ArrayList<Integer> livrosFavoritos
+            ArrayList<Integer> livrosFavoritos,
+            boolean administrador
     ) {
         this.id = id;
         this.nome = nome;
@@ -61,6 +88,7 @@ public class Usuario {
         this.generoFavorito = generoFavorito;
         this.pontos = pontos;
         this.livrosFavoritos = livrosFavoritos;
+        this.administrador = administrador;
     }
 
     public int getId() {
@@ -107,34 +135,44 @@ public class Usuario {
         return livrosFavoritos;
     }
 
-    public void setLivrosFavoritos(ArrayList<Integer> livrosFavoritos) {
+    public void setLivrosFavoritos(
+            ArrayList<Integer> livrosFavoritos
+    ) {
         this.livrosFavoritos = livrosFavoritos;
     }
 
-    /* Adiciona pontos à pontuação atual do usuário.*/
+    public boolean isAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(boolean administrador) {
+        this.administrador = administrador;
+    }
+
+    // Adiciona pontos à pontuação atual do usuário.
     public void adicionarPontos(int pontos) {
         this.pontos += pontos;
     }
 
-    /* Adiciona um livro aos favoritos caso ele ainda não esteja registrado. */
+    // Adiciona um livro aos favoritos caso ele ainda não esteja na lista.
     public void adicionarFavorito(int idLivro) {
         if (!livrosFavoritos.contains(idLivro)) {
             livrosFavoritos.add(idLivro);
         }
     }
 
-    /* Remove um livro da lista de favoritos. */
+    // Remove um livro da lista de favoritos.
     public void removerFavorito(int idLivro) {
         livrosFavoritos.remove(Integer.valueOf(idLivro));
     }
 
-    /* Verifica se um determinado livro está na lista de favoritos. */
+    // Verifica se um determinado livro está entre os favoritos.
     public boolean possuiFavorito(int idLivro) {
         return livrosFavoritos.contains(idLivro);
     }
 
-    /* Converte os dados do objeto para uma linha separada por ponto e vírgula.
-    Os IDs dos livros favoritos são armazenados separados por vírgulas. */
+    /* Converte os dados do usuário para uma linha CSV.
+    Os IDs dos livros favoritos são separados por vírgulas. */
     public String toCSV() {
         String favoritos = "";
 
@@ -151,7 +189,8 @@ public class Usuario {
                 + cpf + ";"
                 + generoFavorito + ";"
                 + pontos + ";"
-                + favoritos;
+                + favoritos + ";"
+                + administrador;
     }
 
     // Retorna os principais dados do usuário em formato legível.
@@ -162,6 +201,8 @@ public class Usuario {
                 + " | CPF: " + cpf
                 + " | Gênero favorito: " + generoFavorito
                 + " | Pontos: " + pontos
-                + " | Favoritos: " + livrosFavoritos.size();
+                + " | Favoritos: " + livrosFavoritos.size()
+                + " | Administrador: "
+                + (administrador ? "Sim" : "Não");
     }
 }
