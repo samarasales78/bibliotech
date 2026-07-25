@@ -2,8 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-// Representa um usuário cadastrado no sistema da biblioteca.
-public class Usuario {
+// Representa a base abstrata dos usuários cadastrados no sistema.
+public abstract class Usuario {
 
     /* O ID identifica individualmente o usuário e permite
     relacioná-lo aos empréstimos registrados no sistema. */
@@ -27,16 +27,12 @@ public class Usuario {
     Os IDs permitem localizar os livros no acervo. */
     private ArrayList<Integer> livrosFavoritos;
 
-    /* Define se o usuário possui permissões administrativas.
-    Administradores gerenciam o acervo e os usuários. */
-    private boolean administrador;
-
     // Construtor padrão.
     public Usuario() {
         livrosFavoritos = new ArrayList<>();
     }
 
-    /* Cria um usuário comum com seus dados principais.
+    /* Cria um usuário com seus dados principais.
     A lista de favoritos é iniciada vazia. */
     public Usuario(
             int id,
@@ -50,25 +46,6 @@ public class Usuario {
         this.generoFavorito = generoFavorito;
         this.pontos = 0;
         this.livrosFavoritos = new ArrayList<>();
-        this.administrador = false;
-    }
-
-    /* Cria um usuário com seu tipo de acesso definido.
-    O parâmetro administrador controla suas permissões. */
-    public Usuario(
-            int id,
-            String nome,
-            String cpf,
-            String generoFavorito,
-            boolean administrador
-    ) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.generoFavorito = generoFavorito;
-        this.pontos = 0;
-        this.livrosFavoritos = new ArrayList<>();
-        this.administrador = administrador;
     }
 
     /* Reconstrói um usuário com todos os dados armazenados.
@@ -79,8 +56,7 @@ public class Usuario {
             String cpf,
             String generoFavorito,
             int pontos,
-            ArrayList<Integer> livrosFavoritos,
-            boolean administrador
+            ArrayList<Integer> livrosFavoritos
     ) {
         this.id = id;
         this.nome = nome;
@@ -88,7 +64,6 @@ public class Usuario {
         this.generoFavorito = generoFavorito;
         this.pontos = pontos;
         this.livrosFavoritos = livrosFavoritos;
-        this.administrador = administrador;
     }
 
     public int getId() {
@@ -141,14 +116,6 @@ public class Usuario {
         this.livrosFavoritos = livrosFavoritos;
     }
 
-    public boolean isAdministrador() {
-        return administrador;
-    }
-
-    public void setAdministrador(boolean administrador) {
-        this.administrador = administrador;
-    }
-
     // Adiciona pontos à pontuação atual do usuário.
     public void adicionarPontos(int pontos) {
         this.pontos += pontos;
@@ -171,6 +138,10 @@ public class Usuario {
         return livrosFavoritos.contains(idLivro);
     }
 
+    /* Define um comportamento obrigatório para as subclasses.
+    Cada tipo de usuário informa seu próprio tipo de acesso. */
+    public abstract String getTipo();
+
     /* Converte os dados do usuário para uma linha CSV.
     Os IDs dos livros favoritos são separados por vírgulas. */
     public String toCSV() {
@@ -189,8 +160,7 @@ public class Usuario {
                 + cpf + ";"
                 + generoFavorito + ";"
                 + pontos + ";"
-                + favoritos + ";"
-                + administrador;
+                + favoritos;
     }
 
     // Retorna os principais dados do usuário em formato legível.
@@ -202,7 +172,6 @@ public class Usuario {
                 + " | Gênero favorito: " + generoFavorito
                 + " | Pontos: " + pontos
                 + " | Favoritos: " + livrosFavoritos.size()
-                + " | Administrador: "
-                + (administrador ? "Sim" : "Não");
+                + " | Tipo: " + getTipo();
     }
 }
