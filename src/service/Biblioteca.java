@@ -9,6 +9,7 @@ import model.Usuario;
 import persistence.Persistencia;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,7 +49,7 @@ public class Biblioteca implements Persistencia {
         usuarios.add(usuario);
     }
 
-    // Busca um livro pelo seu ID.
+    // Busca um livro pelo ID.
     public Livro buscarLivro(int id) {
 
         for (Livro livro : livros) {
@@ -60,7 +61,7 @@ public class Biblioteca implements Persistencia {
         return null;
     }
 
-    // Busca um usuário pelo seu ID.
+    // Busca um usuário pelo ID.
     public Usuario buscarUsuario(int id) {
 
         for (Usuario usuario : usuarios) {
@@ -72,7 +73,7 @@ public class Biblioteca implements Persistencia {
         return null;
     }
 
-    // Busca um usuário pelo seu CPF.
+    // Busca um usuário pelo CPF.
     public Usuario buscarUsuarioPorCpf(String cpf) {
 
         for (Usuario usuario : usuarios) {
@@ -84,10 +85,7 @@ public class Biblioteca implements Persistencia {
         return null;
     }
 
-    /*
-     * Cria um empréstimo, atualiza a disponibilidade do livro
-     * e adiciona pontos ao usuário.
-     */
+    // Realiza um empréstimo.
     public void realizarEmprestimo(
             int idLivro,
             int idUsuario
@@ -116,21 +114,20 @@ public class Biblioteca implements Persistencia {
 
         LocalDate hoje = LocalDate.now();
 
-        emprestimos.add(new Emprestimo(
-                idLivro,
-                idUsuario,
-                hoje,
-                hoje.plusDays(7)
-        ));
+        emprestimos.add(
+                new Emprestimo(
+                        idLivro,
+                        idUsuario,
+                        hoje,
+                        hoje.plusDays(7)
+                )
+        );
 
         livro.registrarEmprestimo();
         usuario.adicionarPontos(10);
     }
 
-    /*
-     * Finaliza o empréstimo ativo, disponibiliza o livro
-     * e adiciona pontos ao usuário pela devolução.
-     */
+    // Registra a devolução de um livro.
     public void devolverLivro(int idLivro)
             throws BibliotecaException {
 
@@ -167,7 +164,7 @@ public class Biblioteca implements Persistencia {
         );
     }
 
-    // Adiciona um livro aos favoritos do usuário.
+    // Adiciona um livro aos favoritos.
     public void adicionarFavorito(
             int idUsuario,
             int idLivro
@@ -188,7 +185,7 @@ public class Biblioteca implements Persistencia {
         }
     }
 
-    // Recomenda livros com base no gênero favorito do usuário.
+    // Recomenda livros com base no gênero favorito.
     public ArrayList<Livro> recomendarLivros(
             int idUsuario
     ) throws BibliotecaException {
@@ -201,7 +198,8 @@ public class Biblioteca implements Persistencia {
             );
         }
 
-        ArrayList<Livro> recomendacoes = new ArrayList<>();
+        ArrayList<Livro> recomendacoes =
+                new ArrayList<>();
 
         for (Livro livro : livros) {
 
@@ -230,38 +228,52 @@ public class Biblioteca implements Persistencia {
         return ranking;
     }
 
-    // Retorna uma cópia dos livros cadastrados.
     public ArrayList<Livro> getLivros() {
         return new ArrayList<>(livros);
     }
 
-    // Retorna uma cópia dos usuários cadastrados.
     public ArrayList<Usuario> getUsuarios() {
         return new ArrayList<>(usuarios);
     }
 
-    // Retorna uma cópia dos empréstimos registrados.
     public ArrayList<Emprestimo> getEmprestimos() {
         return new ArrayList<>(emprestimos);
     }
 
-    /*
-     * Salva livros, usuários e empréstimos em arquivos CSV.
-     */
+    // Salva todos os dados.
     @Override
     public void salvarDados() throws IOException {
+
+        criarPastaDados();
 
         salvarLivros();
         salvarUsuarios();
         salvarEmprestimos();
     }
 
-    // Salva os livros no arquivo CSV.
-    private void salvarLivros() throws IOException {
+    // Cria a pasta de dados caso necessário.
+    private void criarPastaDados() {
 
-        try (PrintWriter arquivo = new PrintWriter(
-                "dados/livros.csv"
-        )) {
+        File pasta = new File("dados");
+
+        if (!pasta.exists()) {
+            pasta.mkdirs();
+        }
+    }
+
+    // Salva os livros.
+    private void salvarLivros()
+            throws IOException {
+
+        try (PrintWriter arquivo =
+                     new PrintWriter(
+                             new OutputStreamWriter(
+                                     new FileOutputStream(
+                                             "dados/livros.csv"
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
+                     )) {
 
             for (Livro livro : livros) {
                 arquivo.println(livro.toCSV());
@@ -269,14 +281,22 @@ public class Biblioteca implements Persistencia {
         }
     }
 
-    // Salva os usuários, incluindo seu tipo de acesso.
-    private void salvarUsuarios() throws IOException {
+    // Salva os usuários e seus tipos.
+    private void salvarUsuarios()
+            throws IOException {
 
-        try (PrintWriter arquivo = new PrintWriter(
-                "dados/usuarios.csv"
-        )) {
+        try (PrintWriter arquivo =
+                     new PrintWriter(
+                             new OutputStreamWriter(
+                                     new FileOutputStream(
+                                             "dados/usuarios.csv"
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
+                     )) {
 
             for (Usuario usuario : usuarios) {
+
                 arquivo.println(
                         usuario.toCSV()
                                 + ";"
@@ -286,36 +306,50 @@ public class Biblioteca implements Persistencia {
         }
     }
 
-    // Salva os empréstimos no arquivo CSV.
-    private void salvarEmprestimos() throws IOException {
+    // Salva os empréstimos.
+    private void salvarEmprestimos()
+            throws IOException {
 
-        try (PrintWriter arquivo = new PrintWriter(
-                "dados/emprestimos.csv"
-        )) {
+        try (PrintWriter arquivo =
+                     new PrintWriter(
+                             new OutputStreamWriter(
+                                     new FileOutputStream(
+                                             "dados/emprestimos.csv"
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
+                     )) {
 
-            for (Emprestimo emprestimo : emprestimos) {
-                arquivo.println(emprestimo.toCSV());
+            for (Emprestimo emprestimo :
+                    emprestimos) {
+
+                arquivo.println(
+                        emprestimo.toCSV()
+                );
             }
         }
     }
 
-    /*
-     * Carrega os dados armazenados nos arquivos CSV.
-     */
+    // Carrega todos os dados.
     @Override
-    public void carregarDados() throws IOException {
+    public void carregarDados()
+            throws IOException {
+
+        livros.clear();
+        usuarios.clear();
+        emprestimos.clear();
 
         carregarLivros();
         carregarUsuarios();
         carregarEmprestimos();
     }
 
-    // Lê e reconstrói os livros armazenados.
-    private void carregarLivros() throws IOException {
+    // Carrega os livros.
+    private void carregarLivros()
+            throws IOException {
 
-        File arquivo = new File(
-                "dados/livros.csv"
-        );
+        File arquivo =
+                new File("dados/livros.csv");
 
         if (!arquivo.exists()) {
             return;
@@ -323,40 +357,56 @@ public class Biblioteca implements Persistencia {
 
         try (BufferedReader leitor =
                      new BufferedReader(
-                             new FileReader(arquivo)
+                             new InputStreamReader(
+                                     new FileInputStream(
+                                             arquivo
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
                      )) {
 
             String linha;
 
-            while ((linha = leitor.readLine()) != null) {
+            while ((linha = leitor.readLine())
+                    != null) {
 
                 if (linha.isBlank()) {
                     continue;
                 }
 
-                String[] dados = linha.split(";");
+                String[] dados =
+                        linha.split(";", -1);
 
-                livros.add(new Livro(
-                        Integer.parseInt(dados[0]),
-                        dados[1],
-                        dados[2],
-                        dados[3],
-                        Boolean.parseBoolean(dados[4]),
-                        Integer.parseInt(dados[5])
-                ));
+                if (dados.length < 6) {
+                    continue;
+                }
+
+                livros.add(
+                        new Livro(
+                                Integer.parseInt(
+                                        dados[0]
+                                ),
+                                dados[1],
+                                dados[2],
+                                dados[3],
+                                Boolean.parseBoolean(
+                                        dados[4]
+                                ),
+                                Integer.parseInt(
+                                        dados[5]
+                                )
+                        )
+                );
             }
         }
     }
 
-    /*
-     * Lê e reconstrói os usuários armazenados.
-     * O último campo define a subclasse do usuário.
-     */
-    private void carregarUsuarios() throws IOException {
+    // Carrega os usuários.
+    private void carregarUsuarios()
+            throws IOException {
 
-        File arquivo = new File(
-                "dados/usuarios.csv"
-        );
+        File arquivo =
+                new File("dados/usuarios.csv");
 
         if (!arquivo.exists()) {
             return;
@@ -364,46 +414,62 @@ public class Biblioteca implements Persistencia {
 
         try (BufferedReader leitor =
                      new BufferedReader(
-                             new FileReader(arquivo)
+                             new InputStreamReader(
+                                     new FileInputStream(
+                                             arquivo
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
                      )) {
 
             String linha;
 
-            while ((linha = leitor.readLine()) != null) {
+            while ((linha = leitor.readLine())
+                    != null) {
 
                 if (linha.isBlank()) {
                     continue;
                 }
 
-                String[] dados = linha.split(";");
+                String[] dados =
+                        linha.split(";", -1);
+
+                if (dados.length < 7) {
+                    continue;
+                }
+
                 ArrayList<Integer> favoritos =
                         new ArrayList<>();
 
-                if (dados.length > 5
-                        && !dados[5].isBlank()) {
+                if (!dados[5].isBlank()) {
 
-                    for (String id : dados[5].split(",")) {
+                    for (String id :
+                            dados[5].split(",")) {
+
                         favoritos.add(
                                 Integer.parseInt(id)
                         );
                     }
                 }
 
-                int id = Integer.parseInt(dados[0]);
+                int id =
+                        Integer.parseInt(dados[0]);
+
                 String nome = dados[1];
                 String cpf = dados[2];
                 String genero = dados[3];
-                int pontos = Integer.parseInt(dados[4]);
 
-                String tipo = dados.length > 6
-                        ? dados[6]
-                        : "Leitor";
+                int pontos =
+                        Integer.parseInt(dados[4]);
+
+                String tipo = dados[6];
 
                 Usuario usuario;
 
                 if (tipo.equalsIgnoreCase(
                         "Administrador"
                 )) {
+
                     usuario = new Administrador(
                             id,
                             nome,
@@ -412,7 +478,9 @@ public class Biblioteca implements Persistencia {
                             pontos,
                             favoritos
                     );
+
                 } else {
+
                     usuario = new Leitor(
                             id,
                             nome,
@@ -428,13 +496,12 @@ public class Biblioteca implements Persistencia {
         }
     }
 
-    // Lê e reconstrói os empréstimos armazenados.
+    // Carrega os empréstimos.
     private void carregarEmprestimos()
             throws IOException {
 
-        File arquivo = new File(
-                "dados/emprestimos.csv"
-        );
+        File arquivo =
+                new File("dados/emprestimos.csv");
 
         if (!arquivo.exists()) {
             return;
@@ -442,26 +509,49 @@ public class Biblioteca implements Persistencia {
 
         try (BufferedReader leitor =
                      new BufferedReader(
-                             new FileReader(arquivo)
+                             new InputStreamReader(
+                                     new FileInputStream(
+                                             arquivo
+                                     ),
+                                     StandardCharsets.UTF_8
+                             )
                      )) {
 
             String linha;
 
-            while ((linha = leitor.readLine()) != null) {
+            while ((linha = leitor.readLine())
+                    != null) {
 
                 if (linha.isBlank()) {
                     continue;
                 }
 
-                String[] dados = linha.split(";");
+                String[] dados =
+                        linha.split(";", -1);
 
-                emprestimos.add(new Emprestimo(
-                        Integer.parseInt(dados[0]),
-                        Integer.parseInt(dados[1]),
-                        LocalDate.parse(dados[2]),
-                        LocalDate.parse(dados[3]),
-                        Boolean.parseBoolean(dados[4])
-                ));
+                if (dados.length < 5) {
+                    continue;
+                }
+
+                emprestimos.add(
+                        new Emprestimo(
+                                Integer.parseInt(
+                                        dados[0]
+                                ),
+                                Integer.parseInt(
+                                        dados[1]
+                                ),
+                                LocalDate.parse(
+                                        dados[2]
+                                ),
+                                LocalDate.parse(
+                                        dados[3]
+                                ),
+                                Boolean.parseBoolean(
+                                        dados[4]
+                                )
+                        )
+                );
             }
         }
     }
