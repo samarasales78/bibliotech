@@ -15,13 +15,13 @@ public class Leitor extends Usuario {
     public Leitor(
             int id,
             String nome,
-            String cpf,
+            String senha,
             String generoFavorito
     ) {
         super(
                 id,
                 nome,
-                cpf,
+                senha,
                 generoFavorito
         );
     }
@@ -31,7 +31,7 @@ public class Leitor extends Usuario {
     public Leitor(
             int id,
             String nome,
-            String cpf,
+            String senha,
             String generoFavorito,
             int pontos,
             ArrayList<Integer> livrosFavoritos
@@ -39,7 +39,7 @@ public class Leitor extends Usuario {
         super(
                 id,
                 nome,
-                cpf,
+                senha,
                 generoFavorito,
                 pontos,
                 livrosFavoritos

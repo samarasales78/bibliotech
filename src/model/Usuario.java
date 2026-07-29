@@ -12,9 +12,9 @@ public abstract class Usuario {
     // Armazena o nome completo do usuário.
     private String nome;
 
-    /* O CPF identifica o usuário e pode ser utilizado
+    /* A senha identifica o usuário e pode ser utilizado
     para evitar cadastros duplicados. */
-    private String cpf;
+    private String senha;
 
     /* Armazena o gênero literário de preferência do usuário.
     Essa informação é utilizada para gerar recomendações. */
@@ -37,12 +37,12 @@ public abstract class Usuario {
     public Usuario(
             int id,
             String nome,
-            String cpf,
+            String senha,
             String generoFavorito
     ) {
         this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
+        this.senha = senha;
         this.generoFavorito = generoFavorito;
         this.pontos = 0;
         this.livrosFavoritos = new ArrayList<>();
@@ -53,14 +53,14 @@ public abstract class Usuario {
     public Usuario(
             int id,
             String nome,
-            String cpf,
+            String senha,
             String generoFavorito,
             int pontos,
             ArrayList<Integer> livrosFavoritos
     ) {
         this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
+        this.senha = senha;
         this.generoFavorito = generoFavorito;
         this.pontos = pontos;
         this.livrosFavoritos = livrosFavoritos;
@@ -82,12 +82,12 @@ public abstract class Usuario {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getGeneroFavorito() {
@@ -157,7 +157,7 @@ public abstract class Usuario {
 
         return id + ";"
                 + nome + ";"
-                + cpf + ";"
+                + senha + ";"
                 + generoFavorito + ";"
                 + pontos + ";"
                 + favoritos;
@@ -168,7 +168,7 @@ public abstract class Usuario {
     public String toString() {
         return "ID: " + id
                 + " | Nome: " + nome
-                + " | CPF: " + cpf
+                + " | Senha: " + senha
                 + " | Gênero favorito: " + generoFavorito
                 + " | Pontos: " + pontos
                 + " | Favoritos: " + livrosFavoritos.size()

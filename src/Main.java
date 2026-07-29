@@ -61,14 +61,14 @@ public class Main {
     }
 
     /*
-     * Localiza o usuário pelo CPF e direciona para o
+     * Localiza o usuário pela Senha e direciona para o
      * menu correspondente ao seu tipo de acesso.
      */
     private static void entrar()
             throws BibliotecaException {
 
-        String cpf = lerTexto("\nCPF: ");
-        Usuario usuario = biblioteca.buscarUsuarioPorCpf(cpf);
+        String senha = lerTexto("\nSENHA: ");
+        Usuario usuario = biblioteca.buscarUsuarioPorSenha(senha);
 
         if (usuario == null) {
             throw new BibliotecaException(
@@ -93,7 +93,7 @@ public class Main {
         titulo("CRIAR CONTA");
 
         String nome = lerTexto("Nome: ");
-        String cpf = lerTexto("CPF: ");
+        String senha = lerTexto("SENHA: ");
         String genero = lerTexto(
                 "Gênero literário favorito: "
         );
@@ -101,7 +101,7 @@ public class Main {
         Leitor leitor = new Leitor(
                 gerarNovoIdUsuario(),
                 nome,
-                cpf,
+                senha,
                 genero
         );
 
@@ -315,7 +315,7 @@ public class Main {
             );
             System.out.println("│ ID: " + usuario.getId());
             System.out.println("│ Nome: " + usuario.getNome());
-            System.out.println("│ CPF: " + usuario.getCpf());
+            System.out.println("│ SENHA: " + usuario.getSenha());
             System.out.println(
                     "│ Gênero favorito: "
                             + usuario.getGeneroFavorito()

@@ -34,12 +34,12 @@ public class Biblioteca implements Persistencia {
         livros.add(livro);
     }
 
-    // Cadastra um usuário e impede IDs ou CPFs duplicados.
+    // Cadastra um usuário e impede IDs ou Senhas duplicados.
     public void cadastrarUsuario(Usuario usuario)
             throws BibliotecaException {
 
         if (buscarUsuario(usuario.getId()) != null
-                || buscarUsuarioPorCpf(usuario.getCpf()) != null) {
+                || buscarUsuarioPorSenha(usuario.getSenha()) != null) {
 
             throw new BibliotecaException(
                     "Usuário já cadastrado."
@@ -73,11 +73,11 @@ public class Biblioteca implements Persistencia {
         return null;
     }
 
-    // Busca um usuário pelo CPF.
-    public Usuario buscarUsuarioPorCpf(String cpf) {
+    // Busca um usuário pela Senha.
+    public Usuario buscarUsuarioPorSenha(String senha) {
 
         for (Usuario usuario : usuarios) {
-            if (usuario.getCpf().equals(cpf)) {
+            if (usuario.getSenha().equals(senha)) {
                 return usuario;
             }
         }
@@ -456,7 +456,7 @@ public class Biblioteca implements Persistencia {
                         Integer.parseInt(dados[0]);
 
                 String nome = dados[1];
-                String cpf = dados[2];
+                String senha = dados[2];
                 String genero = dados[3];
 
                 int pontos =
@@ -473,7 +473,7 @@ public class Biblioteca implements Persistencia {
                     usuario = new Administrador(
                             id,
                             nome,
-                            cpf,
+                            senha,
                             genero,
                             pontos,
                             favoritos
@@ -484,7 +484,7 @@ public class Biblioteca implements Persistencia {
                     usuario = new Leitor(
                             id,
                             nome,
-                            cpf,
+                            senha,
                             genero,
                             pontos,
                             favoritos
