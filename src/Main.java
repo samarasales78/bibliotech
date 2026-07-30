@@ -90,7 +90,20 @@ public class Main {
                 titulo("CRIAR CONTA");
 
                 String nome = lerTexto("Nome: ");
-                String senha = lerTexto("SENHA: ");
+                String senha;
+
+                while (true) {
+                        senha = lerTexto("Senha: ");
+
+                        if (senhaForte(senha)) {
+                                break;
+                        }
+
+                        System.out.println(
+                                        "A senha deve ter pelo menos 8 caracteres, "
+                                                        + "uma letra maiúscula, uma letra minúscula, "
+                                                        + "um número e um caractere especial.");
+                }
                 String genero = lerTexto(
                                 "Gênero literário favorito: ");
 
@@ -101,6 +114,15 @@ public class Main {
                                 genero);
 
                 biblioteca.cadastrarUsuario(leitor);
+
+                try {
+                        biblioteca.salvarDados();
+                } catch (IOException e) {
+                        throw new BibliotecaException("Erro ao salvar os dados.");
+                }
+
+                System.out.println("\nConta criada com sucesso!");
+                System.out.println("Seu ID é: " + leitor.getId());
 
                 System.out.println("\nConta criada com sucesso!");
                 System.out.println("Seu ID é: " + leitor.getId());
@@ -549,4 +571,37 @@ public class Main {
                                         "O campo não pode ficar vazio.");
                 }
         }
+
+        // Verifica se a senha atende aos critérios de segurança.
+private static boolean senhaForte(String senha) {
+
+        if (senha.length() < 8) {
+            return false;
+        }
+    
+        boolean maiuscula = false;
+        boolean minuscula = false;
+        boolean numero = false;
+        boolean especial = false;
+    
+        for (char c : senha.toCharArray()) {
+    
+            if (Character.isUpperCase(c)) {
+                maiuscula = true;
+    
+            } else if (Character.isLowerCase(c)) {
+                minuscula = true;
+    
+            } else if (Character.isDigit(c)) {
+                numero = true;
+    
+            } else {
+                especial = true;
+            }
+        }
+    
+        return maiuscula && minuscula
+                && numero
+                && especial;
+    }
 }
