@@ -84,8 +84,7 @@ public class Main {
          * Permite que uma pessoa crie sua própria conta.
          * Novos cadastros são leitores comuns.
          */
-        private static void criarConta()
-                        throws BibliotecaException {
+        private static void criarConta() throws BibliotecaException {
 
                 titulo("CRIAR CONTA");
 
@@ -104,8 +103,9 @@ public class Main {
                                                         + "uma letra maiúscula, uma letra minúscula, "
                                                         + "um número e um caractere especial.");
                 }
-                String genero = lerTexto(
-                                "Gênero literário favorito: ");
+
+                // Em vez de digitar livremente, o usuário escolhe uma opção
+                String genero = escolherGenero();
 
                 Leitor leitor = new Leitor(
                                 gerarNovoIdUsuario(),
@@ -120,9 +120,6 @@ public class Main {
                 } catch (IOException e) {
                         throw new BibliotecaException("Erro ao salvar os dados.");
                 }
-
-                System.out.println("\nConta criada com sucesso!");
-                System.out.println("Seu ID é: " + leitor.getId());
 
                 System.out.println("\nConta criada com sucesso!");
                 System.out.println("Seu ID é: " + leitor.getId());
@@ -573,35 +570,35 @@ public class Main {
         }
 
         // Verifica se a senha atende aos critérios de segurança.
-private static boolean senhaForte(String senha) {
+        private static boolean senhaForte(String senha) {
 
-        if (senha.length() < 8) {
-            return false;
+                if (senha.length() < 8) {
+                        return false;
+                }
+
+                boolean maiuscula = false;
+                boolean minuscula = false;
+                boolean numero = false;
+                boolean especial = false;
+
+                for (char c : senha.toCharArray()) {
+
+                        if (Character.isUpperCase(c)) {
+                                maiuscula = true;
+
+                        } else if (Character.isLowerCase(c)) {
+                                minuscula = true;
+
+                        } else if (Character.isDigit(c)) {
+                                numero = true;
+
+                        } else {
+                                especial = true;
+                        }
+                }
+
+                return maiuscula && minuscula
+                                && numero
+                                && especial;
         }
-    
-        boolean maiuscula = false;
-        boolean minuscula = false;
-        boolean numero = false;
-        boolean especial = false;
-    
-        for (char c : senha.toCharArray()) {
-    
-            if (Character.isUpperCase(c)) {
-                maiuscula = true;
-    
-            } else if (Character.isLowerCase(c)) {
-                minuscula = true;
-    
-            } else if (Character.isDigit(c)) {
-                numero = true;
-    
-            } else {
-                especial = true;
-            }
-        }
-    
-        return maiuscula && minuscula
-                && numero
-                && especial;
-    }
 }
