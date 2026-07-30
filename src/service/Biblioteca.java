@@ -54,18 +54,28 @@ public class Biblioteca implements Persistencia {
                 return maiorId + 1;
         }
 
-        // Cadastra um usuário e impede IDs ou Senhas duplicados.
         public void cadastrarUsuario(Usuario usuario)
                         throws BibliotecaException {
 
                 if (buscarUsuario(usuario.getId()) != null
-                                || buscarUsuarioPorSenha(usuario.getSenha()) != null) {
+                                || buscarUsuarioPorNome(usuario.getNome()) != null) {
 
                         throw new BibliotecaException(
                                         "Usuário já cadastrado.");
                 }
 
                 usuarios.add(usuario);
+        }
+
+        public Usuario buscarUsuarioPorNome(String nome) {
+
+                for (Usuario usuario : usuarios) {
+                        if (usuario.getNome().equalsIgnoreCase(nome)) {
+                                return usuario;
+                        }
+                }
+
+                return null;
         }
 
         // Busca um livro pelo ID.
@@ -92,11 +102,24 @@ public class Biblioteca implements Persistencia {
                 return null;
         }
 
-        // Busca um usuário pela Senha.
-        public Usuario buscarUsuarioPorSenha(String senha) {
+        // Autentica um usuário utilizando ID e senha.
+        public Usuario autenticarUsuario(int id, String senha) {
 
                 for (Usuario usuario : usuarios) {
-                        if (usuario.getSenha().equals(senha)) {
+                        if (usuario.getId() == id
+                                        && usuario.getSenha().equals(senha)) {
+                                return usuario;
+                        }
+                }
+
+                return null;
+        }
+
+        public Usuario autenticarUsuario(String nome, String senha) {
+
+                for (Usuario usuario : usuarios) {
+                        if (usuario.getNome().equalsIgnoreCase(nome)
+                                        && usuario.getSenha().equals(senha)) {
                                 return usuario;
                         }
                 }

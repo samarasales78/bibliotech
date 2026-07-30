@@ -59,18 +59,18 @@ public class Main {
         }
 
         /*
-         * Localiza o usuário pela Senha e direciona para o
+         * Localiza o usuário pelo ID e senha e direciona para o
          * menu correspondente ao seu tipo de acesso.
          */
-        private static void entrar()
-                        throws BibliotecaException {
+        private static void entrar() throws BibliotecaException {
 
-                String senha = lerTexto("\nSENHA: ");
-                Usuario usuario = biblioteca.buscarUsuarioPorSenha(senha);
+                int id = lerInteiro("\nID: ");
+                String senha = lerTexto("Senha: ");
+
+                Usuario usuario = biblioteca.autenticarUsuario(id, senha);
 
                 if (usuario == null) {
-                        throw new BibliotecaException(
-                                        "Usuário não encontrado.");
+                        throw new BibliotecaException("ID ou senha inválidos.");
                 }
 
                 if (usuario.getTipo().equals("Administrador")) {
