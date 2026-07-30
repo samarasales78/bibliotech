@@ -10,40 +10,40 @@ public class Leitor extends Usuario {
         super();
     }
 
-    /* Cria um leitor com seus dados principais.
-    A lista de favoritos é iniciada vazia. */
+    /*
+     * Cria um leitor com seus dados principais.
+     * A lista de favoritos é iniciada vazia.
+     */
     public Leitor(
             int id,
             String nome,
             String senha,
-            String generoFavorito
-    ) {
+            String generoFavorito) {
         super(
                 id,
                 nome,
                 senha,
-                generoFavorito
-        );
+                generoFavorito);
     }
 
-    /* Reconstrói um leitor com os dados armazenados.
-    Os IDs dos favoritos permitem recuperar os livros correspondentes. */
+    /*
+     * Reconstrói um leitor com os dados armazenados.
+     * Os IDs dos favoritos permitem recuperar os livros correspondentes.
+     */
     public Leitor(
             int id,
             String nome,
             String senha,
             String generoFavorito,
             int pontos,
-            ArrayList<Integer> livrosFavoritos
-    ) {
+            ArrayList<Integer> livrosFavoritos) {
         super(
                 id,
                 nome,
                 senha,
                 generoFavorito,
                 pontos,
-                livrosFavoritos
-        );
+                livrosFavoritos);
     }
 
     // Retorna o tipo de acesso específico do leitor.

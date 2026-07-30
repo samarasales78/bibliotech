@@ -3,8 +3,10 @@ package model;
 // Representa um livro disponível no acervo da biblioteca.
 public class Livro {
 
-    /* O ID identifica individualmente o livro e permite
-    relacioná-lo aos empréstimos e favoritos dos usuários. */
+    /*
+     * O ID identifica individualmente o livro e permite
+     * relacioná-lo aos empréstimos e favoritos dos usuários.
+     */
     private int id;
 
     // Armazena o título da obra.
@@ -13,8 +15,10 @@ public class Livro {
     // Armazena o nome do autor da obra.
     private String autor;
 
-    /* Armazena o gênero literário do livro.
-    Essa informação é utilizada nas recomendações. */
+    /*
+     * Armazena o gênero literário do livro.
+     * Essa informação é utilizada nas recomendações.
+     */
     private String genero;
 
     // Indica se o livro está disponível para empréstimo.
@@ -28,14 +32,15 @@ public class Livro {
         this.disponivel = true;
     }
 
-    /* Cria um livro com seus dados principais.
-    O livro começa disponível e sem empréstimos registrados. */
+    /*
+     * Cria um livro com seus dados principais.
+     * O livro começa disponível e sem empréstimos registrados.
+     */
     public Livro(
             int id,
             String titulo,
             String autor,
-            String genero
-    ) {
+            String genero) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -44,23 +49,23 @@ public class Livro {
         this.quantidadeEmprestimos = 0;
     }
 
-    /* Reconstrói um livro com os dados armazenados.
-    Permite recuperar seu estado de disponibilidade e histórico. */
+    /*
+     * Reconstrói um livro com os dados armazenados.
+     * Permite recuperar seu estado de disponibilidade e histórico.
+     */
     public Livro(
             int id,
             String titulo,
             String autor,
             String genero,
             boolean disponivel,
-            int quantidadeEmprestimos
-    ) {
+            int quantidadeEmprestimos) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.disponivel = disponivel;
-        this.quantidadeEmprestimos =
-                quantidadeEmprestimos;
+        this.quantidadeEmprestimos = quantidadeEmprestimos;
     }
 
     public int getId() {
@@ -108,10 +113,8 @@ public class Livro {
     }
 
     public void setQuantidadeEmprestimos(
-            int quantidadeEmprestimos
-    ) {
-        this.quantidadeEmprestimos =
-                quantidadeEmprestimos;
+            int quantidadeEmprestimos) {
+        this.quantidadeEmprestimos = quantidadeEmprestimos;
     }
 
     /*
@@ -128,8 +131,10 @@ public class Livro {
         this.disponivel = true;
     }
 
-    /* Converte os dados do livro para uma linha CSV.
-    A ordem dos campos deve ser mantida durante a leitura. */
+    /*
+     * Converte os dados do livro para uma linha CSV.
+     * A ordem dos campos deve ser mantida durante a leitura.
+     */
     public String toCSV() {
         return id + ";"
                 + titulo + ";"
@@ -148,8 +153,8 @@ public class Livro {
                 + " | Gênero: " + genero
                 + " | Status: "
                 + (disponivel
-                ? "Disponível"
-                : "Emprestado")
+                        ? "Disponível"
+                        : "Emprestado")
                 + " | Empréstimos: "
                 + quantidadeEmprestimos;
     }

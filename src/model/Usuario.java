@@ -5,26 +5,34 @@ import java.util.ArrayList;
 // Representa a base abstrata dos usuários cadastrados no sistema.
 public abstract class Usuario {
 
-    /* O ID identifica individualmente o usuário e permite
-    relacioná-lo aos empréstimos registrados no sistema. */
+    /*
+     * O ID identifica individualmente o usuário e permite
+     * relacioná-lo aos empréstimos registrados no sistema.
+     */
     private int id;
 
     // Armazena o nome completo do usuário.
     private String nome;
 
-    /* A senha identifica o usuário e pode ser utilizado
-    para evitar cadastros duplicados. */
+    /*
+     * A senha identifica o usuário e pode ser utilizado
+     * para evitar cadastros duplicados.
+     */
     private String senha;
 
-    /* Armazena o gênero literário de preferência do usuário.
-    Essa informação é utilizada para gerar recomendações. */
+    /*
+     * Armazena o gênero literário de preferência do usuário.
+     * Essa informação é utilizada para gerar recomendações.
+     */
     private String generoFavorito;
 
     // Armazena a pontuação acumulada pelo usuário.
     private int pontos;
 
-    /* Armazena os IDs dos livros adicionados aos favoritos.
-    Os IDs permitem localizar os livros no acervo. */
+    /*
+     * Armazena os IDs dos livros adicionados aos favoritos.
+     * Os IDs permitem localizar os livros no acervo.
+     */
     private ArrayList<Integer> livrosFavoritos;
 
     // Construtor padrão.
@@ -32,14 +40,15 @@ public abstract class Usuario {
         livrosFavoritos = new ArrayList<>();
     }
 
-    /* Cria um usuário com seus dados principais.
-    A lista de favoritos é iniciada vazia. */
+    /*
+     * Cria um usuário com seus dados principais.
+     * A lista de favoritos é iniciada vazia.
+     */
     public Usuario(
             int id,
             String nome,
             String senha,
-            String generoFavorito
-    ) {
+            String generoFavorito) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
@@ -48,16 +57,17 @@ public abstract class Usuario {
         this.livrosFavoritos = new ArrayList<>();
     }
 
-    /* Reconstrói um usuário com todos os dados armazenados.
-    Os IDs dos favoritos permitem recuperar os livros correspondentes. */
+    /*
+     * Reconstrói um usuário com todos os dados armazenados.
+     * Os IDs dos favoritos permitem recuperar os livros correspondentes.
+     */
     public Usuario(
             int id,
             String nome,
             String senha,
             String generoFavorito,
             int pontos,
-            ArrayList<Integer> livrosFavoritos
-    ) {
+            ArrayList<Integer> livrosFavoritos) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
@@ -111,8 +121,7 @@ public abstract class Usuario {
     }
 
     public void setLivrosFavoritos(
-            ArrayList<Integer> livrosFavoritos
-    ) {
+            ArrayList<Integer> livrosFavoritos) {
         this.livrosFavoritos = livrosFavoritos;
     }
 
@@ -138,12 +147,16 @@ public abstract class Usuario {
         return livrosFavoritos.contains(idLivro);
     }
 
-    /* Define um comportamento obrigatório para as subclasses.
-    Cada tipo de usuário informa seu próprio tipo de acesso. */
+    /*
+     * Define um comportamento obrigatório para as subclasses.
+     * Cada tipo de usuário informa seu próprio tipo de acesso.
+     */
     public abstract String getTipo();
 
-    /* Converte os dados do usuário para uma linha CSV.
-    Os IDs dos livros favoritos são separados por vírgulas. */
+    /*
+     * Converte os dados do usuário para uma linha CSV.
+     * Os IDs dos livros favoritos são separados por vírgulas.
+     */
     public String toCSV() {
         String favoritos = "";
 

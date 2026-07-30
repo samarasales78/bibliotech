@@ -7,4 +7,4 @@ public interface Persistencia {
     void carregarDados() throws IOException;
 
     void salvarDados() throws IOException;
-    }
+}

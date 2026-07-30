@@ -10,40 +10,40 @@ public class Administrador extends Usuario {
         super();
     }
 
-    /* Cria um administrador com seus dados principais.
-    A lista de favoritos é iniciada vazia. */
+    /*
+     * Cria um administrador com seus dados principais.
+     * A lista de favoritos é iniciada vazia.
+     */
     public Administrador(
             int id,
             String nome,
             String senha,
-            String generoFavorito
-    ) {
+            String generoFavorito) {
         super(
                 id,
                 nome,
                 senha,
-                generoFavorito
-        );
+                generoFavorito);
     }
 
-    /* Reconstrói um administrador com os dados armazenados.
-    Os IDs dos favoritos permitem recuperar os livros correspondentes. */
+    /*
+     * Reconstrói um administrador com os dados armazenados.
+     * Os IDs dos favoritos permitem recuperar os livros correspondentes.
+     */
     public Administrador(
             int id,
             String nome,
             String senha,
             String generoFavorito,
             int pontos,
-            ArrayList<Integer> livrosFavoritos
-    ) {
+            ArrayList<Integer> livrosFavoritos) {
         super(
                 id,
                 nome,
                 senha,
                 generoFavorito,
                 pontos,
-                livrosFavoritos
-        );
+                livrosFavoritos);
     }
 
     // Retorna o tipo de acesso específico do administrador.
